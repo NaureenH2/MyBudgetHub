@@ -1,0 +1,1 @@
+# Defines pages (e.g., /dashboard)
