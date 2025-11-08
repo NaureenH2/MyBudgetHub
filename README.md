@@ -15,7 +15,7 @@ A smart personal finance web application that helps you track expenses, visualiz
 ## 🚀 Tech Stack
 
 - **Backend**: Python with Flask
-- **Database**: SQLite (SQL)
+- **Database**: Standard SQL
 - **Frontend**: JavaScript + Chart.js for interactive visualizations
 - **Styling**: Modern CSS with gradient design
 
