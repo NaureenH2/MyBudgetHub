@@ -1,12 +1,14 @@
 // Chart.js initialization and configuration
 // This file handles all chart rendering for the dashboard
+// Note: Charts are now initialized directly in dashboard.js
 
 /**
  * Initialize the category pie chart
  * @param {string} apiUrl - URL to fetch category chart data
+ * @deprecated Use dashboard.js loadCharts() instead
  */
 function initCategoryChart(apiUrl) {
-    fetch(apiUrl)
+    fetch(apiUrl, { credentials: 'include' })
         .then(response => response.json())
         .then(data => {
             const ctx = document.getElementById('categoryChart');
@@ -76,7 +78,7 @@ function initCategoryChart(apiUrl) {
  * @param {string} apiUrl - URL to fetch monthly chart data
  */
 function initMonthlyChart(apiUrl) {
-    fetch(apiUrl)
+    fetch(apiUrl, { credentials: 'include' })
         .then(response => response.json())
         .then(data => {
             const ctx = document.getElementById('monthlyChart');
@@ -177,7 +179,7 @@ function initMonthlyChart(apiUrl) {
  * @param {string} apiUrl - URL to fetch category monthly comparison data
  */
 function initCategoryMonthlyChart(apiUrl) {
-    fetch(apiUrl)
+    fetch(apiUrl, { credentials: 'include' })
         .then(response => response.json())
         .then(data => {
             const ctx = document.getElementById('categoryMonthlyChart');

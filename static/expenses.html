@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expenses - MyBudgetHub</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="/" class="nav-logo">💰 MyBudgetHub</a>
+            <div class="nav-links" id="navLinks">
+                <a href="/dashboard.html">Dashboard</a>
+                <a href="/expenses.html">Expenses</a>
+                <a href="/budgets.html">Budgets</a>
+                <a href="/upload.html">Upload CSV</a>
+                <a href="#" onclick="handleLogout()">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <div id="messages"></div>
+        <div class="budget-page">
+            <h1>Expense Management</h1>
+            
+            <!-- Add Expense Form -->
+            <div class="form-section">
+                <h2 id="formTitle">Add New Expense</h2>
+                <form id="expenseForm" class="expense-form">
+                    <input type="hidden" id="expenseId">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Description</label>
+                            <input type="text" id="description" class="form-input" placeholder="e.g., Groceries at Walmart" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Amount</label>
+                            <input type="number" id="amount" class="form-input" placeholder="0.00" step="0.01" min="0.01" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Category</label>
+                            <select id="category" class="form-input" required>
+                                <option value="">Select Category</option>
+                                <option value="Food">Food</option>
+                                <option value="Transport">Transport</option>
+                                <option value="Entertainment">Entertainment</option>
+                                <option value="Rent">Rent</option>
+                                <option value="Utilities">Utilities</option>
+                                <option value="Shopping">Shopping</option>
+                                <option value="Travel">Travel</option>
+                                <option value="Health">Health</option>
+                                <option value="Education">Education</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Date</label>
+                            <input type="date" id="date" class="form-input" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary" id="submitBtn">Add Expense</button>
+                        <button type="button" class="btn btn-secondary" id="cancelBtn" style="display: none;" onclick="cancelEdit()">Cancel</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Budget Management -->
+            <div class="form-section">
+                <h2>Set Monthly Budget</h2>
+                <form id="budgetForm" class="budget-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Category</label>
+                            <select id="budgetCategory" class="form-input" required>
+                                <option value="">Select Category</option>
+                                <option value="Food">Food</option>
+                                <option value="Transport">Transport</option>
+                                <option value="Entertainment">Entertainment</option>
+                                <option value="Rent">Rent</option>
+                                <option value="Utilities">Utilities</option>
+                                <option value="Shopping">Shopping</option>
+                                <option value="Travel">Travel</option>
+                                <option value="Health">Health</option>
+                                <option value="Education">Education</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Monthly Budget</label>
+                            <input type="number" id="budgetAmount" class="form-input" placeholder="0.00" step="0.01" min="0.01" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary">Set Budget</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Filters -->
+            <div class="filters-section">
+                <h2>Filter Expenses</h2>
+                <form id="filterForm" class="filter-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Search</label>
+                            <input type="text" id="search" class="form-input" placeholder="Search descriptions...">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Category</label>
+                            <select id="filterCategory" class="form-input">
+                                <option value="">All Categories</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">From Date</label>
+                            <input type="date" id="dateFrom" class="form-input">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">To Date</label>
+                            <input type="date" id="dateTo" class="form-input">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Sort By</label>
+                            <select id="sortBy" class="form-input">
+                                <option value="date_desc">Date (Newest)</option>
+                                <option value="date_asc">Date (Oldest)</option>
+                                <option value="amount_desc">Amount (High to Low)</option>
+                                <option value="amount_asc">Amount (Low to High)</option>
+                                <option value="category">Category</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary">Apply Filters</button>
+                        <button type="button" class="btn btn-secondary" onclick="clearFilters()">Clear Filters</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Expenses Table -->
+            <div class="expenses-section">
+                <h2>Expenses (<span id="expenseCount">0</span>)</h2>
+                <div id="expensesList">
+                    <p>Loading...</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <p>Built with ❤️ for better financial management</p>
+    </footer>
+
+    <script src="api.js"></script>
+    <script src="expenses.js"></script>
+</body>
+</html>
+

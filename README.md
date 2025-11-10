@@ -14,11 +14,12 @@ A smart personal finance web application that helps you track expenses, visualiz
 
 ## 🚀 Tech Stack
 
-- **Backend**: Python with Flask, Flask-Login for authentication, Flask-WTF for forms
+- **Backend**: Python with Flask REST API, Flask-Login for session management
 - **Database**: SQLite with standard SQL (sqlite3)
-- **Frontend**: JavaScript + Chart.js for interactive visualizations
+- **Frontend**: Vanilla JavaScript (no frameworks) + Chart.js for interactive visualizations
 - **Styling**: Modern CSS with gradient design and responsive layout
-- **Security**: Password hashing with Werkzeug, CSRF protection with Flask-WTF
+- **Security**: Password hashing with Werkzeug, session-based authentication
+- **Architecture**: RESTful API with JSON responses, static HTML frontend
 
 ## 📦 Installation
 

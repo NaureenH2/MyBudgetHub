@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload CSV - MyBudgetHub</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="/" class="nav-logo">💰 MyBudgetHub</a>
+            <div class="nav-links" id="navLinks">
+                <a href="/dashboard.html">Dashboard</a>
+                <a href="/expenses.html">Expenses</a>
+                <a href="/budgets.html">Budgets</a>
+                <a href="/upload.html">Upload CSV</a>
+                <a href="/expenses.html" onclick="API.exportExpenses(); return false;">Export CSV</a>
+                <a href="#" onclick="handleLogout()">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <div id="messages"></div>
+        <div class="upload-page">
+            <h1>Upload Bank Statement (CSV)</h1>
+            
+            <div class="upload-info">
+                <h2>CSV Format</h2>
+                <p>Your CSV file should have the following columns:</p>
+                <ul>
+                    <li><strong>description</strong>: Description of the expense (required)</li>
+                    <li><strong>amount</strong>: Amount (numeric, required)</li>
+                    <li><strong>category</strong>: Category name (optional - will be auto-categorized if missing)</li>
+                    <li><strong>date</strong>: Date in YYYY-MM-DD format (optional - will use current date if missing)</li>
+                </ul>
+                
+                <div class="csv-example">
+                    <h3>Example CSV:</h3>
+                    <pre>description,amount,category,date
+Groceries,125.50,Food,2024-10-15
+Gas,45.00,Transport,2024-10-16
+Movie,12.00,Entertainment,2024-10-17
+Amazon Purchase,29.99,,2024-10-18</pre>
+                </div>
+            </div>
+
+            <div class="upload-form-section">
+                <h2>Upload File</h2>
+                <form id="uploadForm" class="upload-form">
+                    <div class="form-group">
+                        <label class="form-label">CSV File</label>
+                        <input type="file" id="fileInput" class="form-input" accept=".csv" required>
+                    </div>
+
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary">Upload CSV</button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="upload-tips">
+                <h2>💡 Tips</h2>
+                <ul>
+                    <li>If the category column is missing, transactions will be automatically categorized based on description keywords</li>
+                    <li>If the date column is missing, the current date will be used</li>
+                    <li>Only the first row will be used as headers - make sure your CSV has headers</li>
+                    <li>Maximum file size: 16MB</li>
+                </ul>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <p>Built with ❤️ for better financial management</p>
+    </footer>
+
+    <script src="api.js"></script>
+    <script src="upload.js"></script>
+</body>
+</html>
+

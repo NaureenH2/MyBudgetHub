@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - MyBudgetHub</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="/" class="nav-logo">💰 MyBudgetHub</a>
+            <div class="nav-links" id="navLinks">
+                <a href="/dashboard.html">Dashboard</a>
+                <a href="/expenses.html">Expenses</a>
+                <a href="/budgets.html">Budgets</a>
+                <a href="/upload.html">Upload CSV</a>
+                <a href="#" onclick="handleLogout()">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <div id="messages"></div>
+        <div class="dashboard">
+            <h1>Dashboard</h1>
+            
+            <!-- Summary Cards -->
+            <div class="summary-cards">
+                <div class="summary-card">
+                    <h3>This Week</h3>
+                    <p class="amount" id="thisWeek">$0.00</p>
+                    <p class="change" id="weekChange"></p>
+                </div>
+                
+                <div class="summary-card">
+                    <h3>Last Week</h3>
+                    <p class="amount" id="lastWeek">$0.00</p>
+                </div>
+                
+                <div class="summary-card">
+                    <h3>This Month</h3>
+                    <p class="amount" id="monthlyTotal">$0.00</p>
+                </div>
+            </div>
+
+            <!-- Budget Alerts -->
+            <div id="budgetAlerts" class="budget-alerts" style="display: none;">
+                <h2>Budget Alerts</h2>
+                <div id="alertsList"></div>
+            </div>
+
+            <!-- Intelligent Insights -->
+            <div id="insights" class="insights" style="display: none;">
+                <h2>💡 Insights</h2>
+                <ul id="insightsList"></ul>
+            </div>
+
+            <!-- Charts -->
+            <div class="charts-container">
+                <div class="chart-card">
+                    <h2>Spending by Category</h2>
+                    <canvas id="categoryChart"></canvas>
+                </div>
+                
+                <div class="chart-card">
+                    <h2>Monthly Trends</h2>
+                    <canvas id="monthlyChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Recent Expenses -->
+            <div class="recent-expenses">
+                <h2>Recent Expenses</h2>
+                <div id="recentExpenses">
+                    <p>Loading...</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <p>Built with ❤️ for better financial management</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="api.js"></script>
+    <script src="charts.js"></script>
+    <script src="dashboard.js"></script>
+</body>
+</html>
+
