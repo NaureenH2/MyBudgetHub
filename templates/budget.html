@@ -1,0 +1,225 @@
+{% extends "base.html" %}
+
+{% block title %}{% if show_expenses == False %}Budgets{% else %}Expenses & Budgets{% endif %} - MyBudgetHub{% endblock %}
+
+{% block content %}
+<div class="budget-page">
+    <h1>{% if show_expenses == False %}Budget Management{% else %}Expense Management{% endif %}</h1>
+    
+    <!-- Add/Edit Expense Form -->
+    {% if show_expenses != False %}
+    <div class="form-section">
+        <h2>{% if edit_mode %}Edit Expense{% else %}Add New Expense{% endif %}</h2>
+        <form method="POST" action="{% if edit_mode %}{{ url_for('routes.edit_expense', expense_id=expense.id) }}{% else %}{{ url_for('routes.expenses') }}{% endif %}" class="expense-form">
+            {% if form and form.description %}
+            {{ form.hidden_tag() }}
+            <div class="form-row">
+                <div class="form-group">
+                    {{ form.description.label(class="form-label") }}
+                    {{ form.description(class="form-input", placeholder="e.g., Groceries at Walmart") }}
+                    {% if form.description.errors %}
+                        <div class="form-error">{{ form.description.errors[0] }}</div>
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    {{ form.amount.label(class="form-label") }}
+                    {{ form.amount(class="form-input", placeholder="0.00", step="0.01") }}
+                    {% if form.amount.errors %}
+                        <div class="form-error">{{ form.amount.errors[0] }}</div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    {{ form.category.label(class="form-label") }}
+                    {{ form.category(class="form-input") }}
+                    {% if form.category.errors %}
+                        <div class="form-error">{{ form.category.errors[0] }}</div>
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    {{ form.date.label(class="form-label") }}
+                    {{ form.date(class="form-input") }}
+                    {% if form.date.errors %}
+                        <div class="form-error">{{ form.date.errors[0] }}</div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="form-group">
+                {{ form.submit(class="btn btn-primary") }}
+                {% if edit_mode %}
+                <a href="{{ url_for('routes.expenses') }}" class="btn btn-secondary">Cancel</a>
+                {% endif %}
+            </div>
+            {% endif %}
+        </form>
+    </div>
+    {% endif %}
+
+    <!-- Budget Management -->
+    <div class="form-section">
+        <h2>Set Monthly Budget</h2>
+        <form method="POST" action="{{ url_for('routes.budgets') }}" class="budget-form">
+            {{ form.hidden_tag() if form else '' }}
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label">Category</label>
+                    {% if form and form.category %}
+                        {{ form.category(class="form-input") }}
+                        {% if form.category.errors %}
+                            <div class="form-error">{{ form.category.errors[0] }}</div>
+                        {% endif %}
+                    {% else %}
+                        <select name="category" class="form-input" required>
+                            <option value="">Select Category</option>
+                            <option value="Food">Food</option>
+                            <option value="Transport">Transport</option>
+                            <option value="Entertainment">Entertainment</option>
+                            <option value="Rent">Rent</option>
+                            <option value="Utilities">Utilities</option>
+                            <option value="Shopping">Shopping</option>
+                            <option value="Travel">Travel</option>
+                            <option value="Health">Health</option>
+                            <option value="Education">Education</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Monthly Budget</label>
+                    {% if form and form.amount %}
+                        {{ form.amount(class="form-input", placeholder="0.00", step="0.01") }}
+                        {% if form.amount.errors %}
+                            <div class="form-error">{{ form.amount.errors[0] }}</div>
+                        {% endif %}
+                    {% else %}
+                        <input type="number" name="amount" class="form-input" placeholder="0.00" step="0.01" min="0.01" required>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="form-group">
+                {% if form and form.submit %}
+                    {{ form.submit(class="btn btn-primary") }}
+                {% else %}
+                    <button type="submit" name="submit" class="btn btn-primary">Set Budget</button>
+                {% endif %}
+            </div>
+        </form>
+    </div>
+
+    <!-- Budget Status -->
+    {% if budgets %}
+    <div class="budget-status">
+        <h2>Current Budgets</h2>
+        <div class="budget-list">
+            {% for budget_item in budgets %}
+            <div class="budget-item {% if budget_item.is_over %}over-budget{% elif budget_item.is_warning %}warning{% endif %}">
+                <div class="budget-header">
+                    <h3>{{ budget_item.budget.category }}</h3>
+                    <span class="budget-amount">{{ format_currency(budget_item.budget.amount) }}</span>
+                </div>
+                <div class="budget-progress">
+                    <div class="progress-bar">
+                        {% set progress_width = budget_item.percentage if budget_item.percentage <= 100 else 100 %}
+                        <div class="progress-fill" style="width: {{ progress_width }}%"></div>
+                    </div>
+                    <div class="budget-details">
+                        <span>Spent: {{ format_currency(budget_item.spent) }}</span>
+                        <span>Remaining: {{ format_currency(budget_item.remaining) }}</span>
+                        <span>{{ "%.1f"|format(budget_item.percentage) }}%</span>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Filters -->
+    {% if show_expenses != False and expenses is defined %}
+    <div class="filters-section">
+        <h2>Filter Expenses</h2>
+        <form method="GET" action="{{ url_for('routes.expenses') }}" class="filter-form">
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label">Search</label>
+                    <input type="text" name="search" class="form-input" placeholder="Search descriptions..." value="{{ search_query if search_query else '' }}">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Category</label>
+                    <select name="category" class="form-input">
+                        <option value="">All Categories</option>
+                        {% if categories %}
+                        {% for cat in categories %}
+                        <option value="{{ cat }}" {% if category_filter == cat %}selected{% endif %}>{{ cat }}</option>
+                        {% endfor %}
+                        {% endif %}
+                    </select>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label">From Date</label>
+                    <input type="date" name="date_from" class="form-input" value="{{ date_from if date_from else '' }}">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">To Date</label>
+                    <input type="date" name="date_to" class="form-input" value="{{ date_to if date_to else '' }}">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Sort By</label>
+                    <select name="sort" class="form-input">
+                        <option value="date_desc" {% if sort_by == 'date_desc' %}selected{% endif %}>Date (Newest)</option>
+                        <option value="date_asc" {% if sort_by == 'date_asc' %}selected{% endif %}>Date (Oldest)</option>
+                        <option value="amount_desc" {% if sort_by == 'amount_desc' %}selected{% endif %}>Amount (High to Low)</option>
+                        <option value="amount_asc" {% if sort_by == 'amount_asc' %}selected{% endif %}>Amount (Low to High)</option>
+                        <option value="category" {% if sort_by == 'category' %}selected{% endif %}>Category</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">Apply Filters</button>
+                <a href="{{ url_for('routes.expenses') }}" class="btn btn-secondary">Clear Filters</a>
+            </div>
+        </form>
+    </div>
+
+    <!-- Expenses Table -->
+    <div class="expenses-section">
+        <h2>Expenses ({{ expenses|length }})</h2>
+        {% if expenses %}
+        <table class="expense-table">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Description</th>
+                    <th>Category</th>
+                    <th>Amount</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for expense in expenses %}
+                <tr>
+                    <td>{{ expense.date }}</td>
+                    <td>{{ expense.description }}</td>
+                    <td><span class="category-badge">{{ expense.category }}</span></td>
+                    <td>{{ format_currency(expense.amount) }}</td>
+                    <td>
+                        <a href="{{ url_for('routes.edit_expense', expense_id=expense.id) }}" class="btn btn-small btn-edit">Edit</a>
+                        <form method="POST" action="{{ url_for('routes.delete_expense', expense_id=expense.id) }}" style="display: inline;">
+                            <button type="submit" class="btn btn-small btn-delete" onclick="return confirm('Are you sure you want to delete this expense?')">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p>No expenses found. <a href="{{ url_for('routes.expenses') }}">Add your first expense</a>!</p>
+        {% endif %}
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+

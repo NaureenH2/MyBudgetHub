@@ -1,0 +1,166 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - MyBudgetHub{% endblock %}
+
+{% block content %}
+<div class="dashboard">
+    <h1>Dashboard</h1>
+    
+    <!-- Summary Cards -->
+    <div class="summary-cards">
+        <div class="summary-card">
+            <h3>This Week</h3>
+            <p class="amount">{{ format_currency(this_week) }}</p>
+            {% if week_change != 0 %}
+                <p class="change {% if week_change > 0 %}positive{% else %}negative{% endif %}">
+                    {{ "%.1f"|format(week_change) }}% vs last week
+                </p>
+            {% endif %}
+        </div>
+        
+        <div class="summary-card">
+            <h3>Last Week</h3>
+            <p class="amount">{{ format_currency(last_week) }}</p>
+        </div>
+        
+        <div class="summary-card">
+            <h3>This Month</h3>
+            <p class="amount">{{ format_currency(monthly_total) }}</p>
+        </div>
+    </div>
+
+    <!-- Budget Alerts -->
+    {% if budget_alerts %}
+    <div class="budget-alerts">
+        <h2>Budget Alerts</h2>
+        {% for alert in budget_alerts %}
+        <div class="alert {% if alert.is_over %}alert-danger{% else %}alert-warning{% endif %}">
+            <strong>{{ alert.category }}:</strong> 
+            Spent {{ format_currency(alert.spent) }} of {{ format_currency(alert.budget) }} 
+            ({{ "%.1f"|format(alert.percentage) }}%)
+            {% if alert.is_over %}
+                - Over budget by {{ format_currency(alert.remaining|abs) }}
+            {% else %}
+                - Warning: {{ "%.1f"|format(100 - alert.percentage) }}% remaining
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- Intelligent Insights -->
+    {% if insights %}
+    <div class="insights">
+        <h2>💡 Insights</h2>
+        <ul>
+            {% for insight in insights %}
+            <li>{{ insight }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+
+    <!-- Charts -->
+    <div class="charts-container">
+        <div class="chart-card">
+            <h2>Spending by Category</h2>
+            <canvas id="categoryChart"></canvas>
+        </div>
+        
+        <div class="chart-card">
+            <h2>Monthly Trends</h2>
+            <canvas id="monthlyChart"></canvas>
+        </div>
+    </div>
+
+    <!-- Recent Expenses -->
+    <div class="recent-expenses">
+        <h2>Recent Expenses</h2>
+        {% if expenses %}
+        <table class="expense-table">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Description</th>
+                    <th>Category</th>
+                    <th>Amount</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for expense in expenses %}
+                <tr>
+                    <td>{{ expense.date }}</td>
+                    <td>{{ expense.description }}</td>
+                    <td><span class="category-badge">{{ expense.category }}</span></td>
+                    <td>{{ format_currency(expense.amount) }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p>No expenses yet. <a href="{{ url_for('routes.expenses') }}">Add your first expense</a>!</p>
+        {% endif %}
+    </div>
+</div>
+
+<script>
+    // Category Pie Chart
+    fetch('{{ url_for("routes.api_category_chart") }}')
+        .then(response => response.json())
+        .then(data => {
+            const ctx = document.getElementById('categoryChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: data.labels,
+                    datasets: [{
+                        data: data.data,
+                        backgroundColor: [
+                            '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0',
+                            '#9966FF', '#FF9F40', '#FF6384', '#C9CBCF',
+                            '#4BC0C0', '#FF6384'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'right'
+                        }
+                    }
+                }
+            });
+        });
+
+    // Monthly Trend Line Chart
+    fetch('{{ url_for("routes.api_monthly_chart") }}')
+        .then(response => response.json())
+        .then(data => {
+            const ctx = document.getElementById('monthlyChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: data.labels,
+                    datasets: [{
+                        label: 'Monthly Spending',
+                        data: data.data,
+                        borderColor: '#36A2EB',
+                        backgroundColor: 'rgba(54, 162, 235, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        });
+</script>
+{% endblock %}
+

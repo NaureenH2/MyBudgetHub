@@ -14,10 +14,11 @@ A smart personal finance web application that helps you track expenses, visualiz
 
 ## 🚀 Tech Stack
 
-- **Backend**: Python with Flask
-- **Database**: Standard SQL
+- **Backend**: Python with Flask, Flask-Login for authentication, Flask-WTF for forms
+- **Database**: SQLite with standard SQL (sqlite3)
 - **Frontend**: JavaScript + Chart.js for interactive visualizations
-- **Styling**: Modern CSS with gradient design
+- **Styling**: Modern CSS with gradient design and responsive layout
+- **Security**: Password hashing with Werkzeug, CSRF protection with Flask-WTF
 
 ## 📦 Installation
 
@@ -40,7 +41,7 @@ A smart personal finance web application that helps you track expenses, visualiz
 
 3. **Install dependencies**
    ```bash
-   pip install Flask
+   pip install -r requirements.txt
    ```
 
 4. **Run the application**
@@ -70,10 +71,12 @@ A smart personal finance web application that helps you track expenses, visualiz
 
 ### Importing CSV Files
 The CSV should have the following columns:
-- `description`: Description of the expense
-- `amount`: Amount (numeric)
-- `category`: Category name
-- `date`: Date in YYYY-MM-DD format
+- `description`: Description of the expense (required)
+- `amount`: Amount (numeric, required)
+- `category`: Category name (optional - will be auto-categorized if missing)
+- `date`: Date in YYYY-MM-DD format (optional - will use current date if missing)
+
+The app automatically categorizes transactions based on description keywords if the category is missing.
 
 Example CSV format:
 ```csv
@@ -81,6 +84,7 @@ description,amount,category,date
 Groceries,125.50,Food,2024-10-15
 Gas,45.00,Transport,2024-10-16
 Movie,12.00,Entertainment,2024-10-17
+Amazon Purchase,29.99,,2024-10-18
 ```
 
 ### Exporting Data
@@ -88,11 +92,13 @@ Movie,12.00,Entertainment,2024-10-17
 
 ## 🎨 Dashboard Features
 
-1. **Summary Cards**: View this week's, last week's, and monthly spending totals
-2. **Budget Alerts**: Red alerts for categories exceeding budget
+1. **Summary Cards**: View this week's, last week's, and monthly spending totals with percentage comparisons
+2. **Budget Alerts**: Red alerts for categories exceeding budget, yellow warnings at 80%
 3. **Category Pie Chart**: Visual breakdown of spending by category
 4. **Trend Line Chart**: Monthly spending trends over the last 6 months
-5. **Expense Table**: Complete list of all expenses with edit/delete options
+5. **Intelligent Insights**: Smart predictions and comparisons like "You spent 25% more on food compared to last month"
+6. **Expense Table**: Complete list of recent expenses with edit/delete options
+7. **Budget Tracking**: Visual progress bars showing budget usage with warnings and over-budget indicators
 
 ## 💼 Resume Pitch
 

@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block title %}Upload CSV - MyBudgetHub{% endblock %}
+
+{% block content %}
+<div class="upload-page">
+    <h1>Upload Bank Statement (CSV)</h1>
+    
+    <div class="upload-info">
+        <h2>CSV Format</h2>
+        <p>Your CSV file should have the following columns:</p>
+        <ul>
+            <li><strong>description</strong>: Description of the expense</li>
+            <li><strong>amount</strong>: Amount (numeric)</li>
+            <li><strong>category</strong>: Category name (optional - will be auto-categorized if missing)</li>
+            <li><strong>date</strong>: Date in YYYY-MM-DD format (optional - will use current date if missing)</li>
+        </ul>
+        
+        <div class="csv-example">
+            <h3>Example CSV:</h3>
+            <pre>description,amount,category,date
+Groceries,125.50,Food,2024-10-15
+Gas,45.00,Transport,2024-10-16
+Movie,12.00,Entertainment,2024-10-17
+Amazon Purchase,29.99,Shopping,2024-10-18</pre>
+        </div>
+    </div>
+
+    <div class="upload-form-section">
+        <h2>Upload File</h2>
+        <form method="POST" enctype="multipart/form-data" class="upload-form">
+            {{ form.hidden_tag() }}
+            
+            <div class="form-group">
+                {{ form.file.label(class="form-label") }}
+                {{ form.file(class="form-input") }}
+                {% if form.file.errors %}
+                    <div class="form-error">{{ form.file.errors[0] }}</div>
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                {{ form.submit(class="btn btn-primary") }}
+            </div>
+        </form>
+    </div>
+
+    <div class="upload-tips">
+        <h2>💡 Tips</h2>
+        <ul>
+            <li>If the category column is missing, transactions will be automatically categorized based on description keywords</li>
+            <li>If the date column is missing, the current date will be used</li>
+            <li>Only the first row will be used as headers - make sure your CSV has headers</li>
+            <li>Maximum file size: 16MB</li>
+        </ul>
+    </div>
+</div>
+{% endblock %}
+
