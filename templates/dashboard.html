@@ -64,12 +64,12 @@
     <div class="charts-container">
         <div class="chart-card">
             <h2>Spending by Category</h2>
-            <canvas id="categoryChart"></canvas>
+            <canvas id="categoryChart" data-api-url="{{ url_for('routes.api_category_chart') }}"></canvas>
         </div>
         
         <div class="chart-card">
             <h2>Monthly Trends</h2>
-            <canvas id="monthlyChart"></canvas>
+            <canvas id="monthlyChart" data-api-url="{{ url_for('routes.api_monthly_chart') }}"></canvas>
         </div>
     </div>
 
@@ -102,65 +102,9 @@
         {% endif %}
     </div>
 </div>
+{% endblock %}
 
-<script>
-    // Category Pie Chart
-    fetch('{{ url_for("routes.api_category_chart") }}')
-        .then(response => response.json())
-        .then(data => {
-            const ctx = document.getElementById('categoryChart').getContext('2d');
-            new Chart(ctx, {
-                type: 'pie',
-                data: {
-                    labels: data.labels,
-                    datasets: [{
-                        data: data.data,
-                        backgroundColor: [
-                            '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0',
-                            '#9966FF', '#FF9F40', '#FF6384', '#C9CBCF',
-                            '#4BC0C0', '#FF6384'
-                        ]
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    plugins: {
-                        legend: {
-                            position: 'right'
-                        }
-                    }
-                }
-            });
-        });
-
-    // Monthly Trend Line Chart
-    fetch('{{ url_for("routes.api_monthly_chart") }}')
-        .then(response => response.json())
-        .then(data => {
-            const ctx = document.getElementById('monthlyChart').getContext('2d');
-            new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: data.labels,
-                    datasets: [{
-                        label: 'Monthly Spending',
-                        data: data.data,
-                        borderColor: '#36A2EB',
-                        backgroundColor: 'rgba(54, 162, 235, 0.1)',
-                        tension: 0.4,
-                        fill: true
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    scales: {
-                        y: {
-                            beginAtZero: true
-                        }
-                    }
-                }
-            });
-        });
-</script>
+{% block scripts %}
+<script src="{{ url_for('static', filename='charts.js') }}"></script>
 {% endblock %}
 
