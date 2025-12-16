@@ -2,17 +2,17 @@
 
 A smart personal finance web application that helps you track expenses, visualize spending patterns, and manage budgets with interactive charts and intelligent data organization.
 
-## 🎯 Features
+## Features
 
-- **💰 Expense Tracking**: Add, edit, and delete expenses with categories and dates
-- **📊 Data Visualization**: Interactive pie charts for category spending and line graphs for monthly trends using Chart.js
-- **🔔 Budget Alerts**: Automatic warnings when spending exceeds 80% of budget
-- **🔍 Search & Filter**: Filter expenses by date range, category, or keyword
-- **📁 CSV Import**: Upload bank statements (CSV format) and automatically parse transactions
-- **💾 CSV Export**: Export all expense data as CSV
-- **📈 Dashboard Summaries**: Weekly comparisons and monthly spending overviews
+- ** Expense Tracking**: Add, edit, and delete expenses with categories and dates
+- ** Data Visualization**: Interactive pie charts for category spending and line graphs for monthly trends using Chart.js
+- ** Budget Alerts**: Automatic warnings when spending exceeds 80% of budget
+- ** Search & Filter**: Filter expenses by date range, category, or keyword
+- ** CSV Import**: Upload bank statements (CSV format) and automatically parse transactions
+- ** CSV Export**: Export all expense data as CSV
+- ** Dashboard Summaries**: Weekly comparisons and monthly spending overviews
 
-## 🚀 Tech Stack
+##  Tech Stack
 
 - **Backend**: Python with Flask REST API, Flask-Login for session management
 - **Database**: SQLite with standard SQL (sqlite3)
@@ -21,7 +21,7 @@ A smart personal finance web application that helps you track expenses, visualiz
 - **Security**: Password hashing with Werkzeug, session-based authentication
 - **Architecture**: RESTful API with JSON responses, static HTML frontend
 
-## 📦 Installation
+## Installation
 
 1. **Clone the repository**
    ```bash
@@ -53,7 +53,7 @@ A smart personal finance web application that helps you track expenses, visualiz
 5. **Open your browser**
    Navigate to `http://127.0.0.1:5000`
 
-## 📝 Usage
+## Usage
 
 ### Adding Expenses
 - Fill out the expense form with description, amount, category, and date
@@ -91,7 +91,7 @@ Amazon Purchase,29.99,,2024-10-18
 ### Exporting Data
 - Click "Export to CSV" to download all expenses as a CSV file
 
-## 🎨 Dashboard Features
+## Dashboard Features
 
 1. **Summary Cards**: View this week's, last week's, and monthly spending totals with percentage comparisons
 2. **Budget Alerts**: Red alerts for categories exceeding budget, yellow warnings at 80%
@@ -101,24 +101,21 @@ Amazon Purchase,29.99,,2024-10-18
 6. **Expense Table**: Complete list of recent expenses with edit/delete options
 7. **Budget Tracking**: Visual progress bars showing budget usage with warnings and over-budget indicators
 
-## 💼 Resume Pitch
+## Resume Pitch
 
 > "Built a personal finance dashboard with SQL-backed persistence, interactive data visualizations using Chart.js, and predictive analytics to forecast spending trends. Implemented CSV imports for bank statement parsing and anomaly detection to demonstrate backend automation and frontend data visualization. Features include budget tracking with alert systems, advanced filtering with SQL queries, and real-time expense management."
 
-## 🤝 Contributing
+## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
 
-## 📄 License
+## License
 
 This project is open source and available under the [MIT License](LICENSE).
 
-## 🙏 Acknowledgments
+## Acknowledgments
 
 - Chart.js for beautiful data visualizations
 - Flask for the backend framework
 - SQLite for reliable data persistence
 
----
-
-**Built with ❤️ for better financial management**
